@@ -74,18 +74,32 @@ export async function POST(request: Request) {
       throw new Error("Empty response from AI model")
     }
 
-    return new Response(JSON.stringify({ text }), {
-      headers: { "Content-Type": "application/json" },
-    })
+    // Format response with improved structure
+    return new Response(
+      JSON.stringify({
+        text: text.trim(),
+        timestamp: Date.now(),
+        format: "markdown",
+        status: "success"
+      }), 
+      {
+        headers: { 
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache"
+        }
+      }
+    )
   } catch (error) {
     console.error("Error calling Gemini API:", error)
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : "Failed to process request" 
+        error: error instanceof Error ? error.message : "Failed to process request",
+        timestamp: Date.now(),
+        status: "error"
       }), 
       {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       }
     )
   }

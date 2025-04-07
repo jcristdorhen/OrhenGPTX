@@ -165,6 +165,97 @@ pre[class*="language-"] {
   padding: 16px;
 }
 
+/* Code block styling */
+.prose pre {
+  background-color: #1e1e1e;
+  border-radius: 0.5rem;
+  border: 1px solid hsl(var(--border));
+  margin: 1.5em 0;
+  overflow: hidden;
+}
+
+.prose pre > code {
+  display: block;
+  padding: 1rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  overflow-x: auto;
+}
+
+/* Token colors */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6a9955;
+}
+
+.token.punctuation {
+  color: #d4d4d4;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #b5cea8;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #ce9178;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #d4d4d4;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #569cd6;
+}
+
+.token.function,
+.token.class-name {
+  color: #dcdcaa;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+  color: #d16969;
+}
+
+/* Code block header */
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #252525;
+  border-bottom: 1px solid hsl(var(--border));
+  color: #d4d4d4;
+}
+
+/* Line numbers */
+.line-numbers .line-numbers-rows {
+  border-right: 1px solid #404040;
+  padding-right: 0.5rem;
+}
+
 /* Markdown styling */
 .markdown-body h1,
 .markdown-body h2,
@@ -198,8 +289,39 @@ pre[class*="language-"] {
 .markdown-body ul,
 .markdown-body ol {
   margin-top: 0;
-  margin-bottom: 1em;
-  padding-left: 2em;
+  margin-bottom: 1.5em;
+  padding-left: 1.2em;
+  line-height: 1.6;
+}
+
+.markdown-body li {
+  position: relative;
+  margin-bottom: 0.5em;
+  padding-left: 1em;
+}
+
+.markdown-body li::before {
+  position: absolute;
+  left: 0;
+}
+
+.markdown-body ul li::before {
+  content: "•";
+  color: hsl(var(--foreground));
+}
+
+.markdown-body ol {
+  counter-reset: list-counter;
+}
+
+.markdown-body ol li {
+  counter-increment: list-counter;
+}
+
+.markdown-body ol li::before {
+  content: counter(list-counter) ".";
+  color: hsl(var(--foreground));
+  font-weight: 500;
 }
 
 .markdown-body ul {

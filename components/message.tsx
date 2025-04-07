@@ -4,7 +4,7 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import type { Message as MessageType } from "@/lib/store"
 import { ClipboardIcon, CheckIcon } from "lucide-react"
-import MarkdownRenderer from "./markdown-renderer"
+import { MarkdownRenderer } from "./markdown-renderer"
 
 interface MessageProps {
   message: MessageType

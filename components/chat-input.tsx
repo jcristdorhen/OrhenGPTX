@@ -34,7 +34,6 @@ export default function ChatInput() {
     setLoading(true);
 
     try {
-      // Create a complete user message with all required fields
       const userMessage = {
         id: Math.random().toString(36).substring(2, 9),
         role: "user" as const,
@@ -49,23 +48,27 @@ export default function ChatInput() {
           : undefined,
       };
 
-      // Add user message first
       addMessage(userMessage);
 
-      // Then send all messages including the new one
       const response = await sendMessage([...messages, userMessage], mode);
       
       if (response) {
         addMessage({
+          id: Math.random().toString(36).substring(2, 9),
           role: "assistant",
           content: response,
+          timestamp: Date.now(),
+          format: "markdown"
         });
       }
     } catch (error) {
-      console.error("Error in chat:", error);
       addMessage({
+        id: Math.random().toString(36).substring(2, 9),
         role: "assistant",
-        content: `Error: ${error instanceof Error ? error.message : "Failed to process your request"}`,
+        content: `**Error:** ${error instanceof Error ? error.message : "Failed to process your request"}`,
+        timestamp: Date.now(),
+        format: "markdown",
+        isError: true
       });
     } finally {
       setLoading(false);
