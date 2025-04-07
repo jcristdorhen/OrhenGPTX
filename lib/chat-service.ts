@@ -57,6 +57,17 @@ export async function processVoiceInput(audioBlob: Blob) {
   }
 }
 
+export class ChatServiceError extends Error {
+  constructor(
+    message: string,
+    public code: string = 'CHAT_SERVICE_ERROR',
+    public status: number = 500
+  ) {
+    super(message);
+    this.name = 'ChatServiceError';
+  }
+}
+
 export async function searchQuery(query: string) {
   try {
     const response = await fetch("/api/search", {
@@ -65,17 +76,28 @@ export async function searchQuery(query: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ query }),
-    })
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to process search")
+      const error = await response.json().catch(() => ({}));
+      throw new ChatServiceError(
+        error.message || 'Failed to process search',
+        error.code || 'SEARCH_ERROR',
+        response.status
+      );
     }
 
-    const data = await response.json()
-    return data.results
+    const data = await response.json();
+    return data.results;
   } catch (error) {
-    console.error("Error processing search:", error)
-    throw error
+    console.error("Error processing search:", error);
+    if (error instanceof ChatServiceError) {
+      throw error;
+    }
+    throw new ChatServiceError(
+      error instanceof Error ? error.message : 'Unknown error occurred',
+      'SEARCH_ERROR'
+    );
   }
 }
 

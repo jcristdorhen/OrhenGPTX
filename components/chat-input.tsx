@@ -16,6 +16,11 @@ import { sendMessage, searchQuery } from "@/lib/chat-service"
 
 type InputMode = "normal" | "voice" | "attach" | "search"
 
+interface ChatMessage extends Message {
+  format?: string;
+  isError?: boolean;
+}
+
 export default function ChatInput() {
   const [input, setInput] = useState("")
   const [isRecording, setIsRecording] = useState(false)
@@ -34,9 +39,9 @@ export default function ChatInput() {
     setLoading(true);
 
     try {
-      const userMessage = {
+      const userMessage: ChatMessage = {
         id: Math.random().toString(36).substring(2, 9),
-        role: "user" as const,
+        role: "user",
         content: userInput || "Sent attachments",
         timestamp: Date.now(),
         attachments: attachments.length > 0 
@@ -50,26 +55,32 @@ export default function ChatInput() {
 
       addMessage(userMessage);
 
+      if (!navigator.onLine) {
+        throw new Error("No internet connection");
+      }
+
       const response = await sendMessage([...messages, userMessage], mode);
       
       if (response) {
-        addMessage({
+        const assistantMessage: ChatMessage = {
           id: Math.random().toString(36).substring(2, 9),
           role: "assistant",
           content: response,
           timestamp: Date.now(),
           format: "markdown"
-        });
+        };
+        addMessage(assistantMessage);
       }
     } catch (error) {
-      addMessage({
+      const errorMessage: ChatMessage = {
         id: Math.random().toString(36).substring(2, 9),
         role: "assistant",
         content: `**Error:** ${error instanceof Error ? error.message : "Failed to process your request"}`,
         timestamp: Date.now(),
         format: "markdown",
         isError: true
-      });
+      };
+      addMessage(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -108,12 +119,18 @@ export default function ChatInput() {
 
   const startRecording = async () => {
     try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error("Media devices not supported");
+      }
+
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
       const mediaRecorder = new MediaRecorder(stream)
       const audioChunks: BlobPart[] = []
 
       mediaRecorder.ondataavailable = (event) => {
-        audioChunks.push(event.data)  
+        if (event.data.size > 0) {
+          audioChunks.push(event.data);
+        }
       }
 
       mediaRecorder.onstop = async () => {
@@ -129,6 +146,8 @@ export default function ChatInput() {
       setIsRecording(true)
     } catch (error) {
       console.error("Error accessing microphone:", error)
+      const errorMsg = error instanceof Error ? error.message : "Failed to access microphone";
+      alert(errorMsg);
     }
   }
 
