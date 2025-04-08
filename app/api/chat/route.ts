@@ -78,7 +78,9 @@ export async function POST(request: Request) {
       history: formattedHistory,
       generationConfig: {
         temperature: 0.9,
-        maxOutputTokens: 2048,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
       }
     });
 
