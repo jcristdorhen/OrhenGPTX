@@ -7,8 +7,8 @@
 </p>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/OrhenGPT?style=social)](https://github.com/yourusername/OrhenGPT/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/yourusername/OrhenGPT?style=social)](https://github.com/yourusername/OrhenGPT/network/members)
+[![GitHub Stars](https://img.shields.io/github/stars/jcristdorhen/OrhenGPTX?style=social)](https://github.com/jcristdorhen/OrhenGPTX/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/jcristdorhen/OrhenGPTX?style=social)](https://github.com/jcristdorhen/OrhenGPTX/network/members)
 
 _A superior ChatGPT clone with enhanced UI/UX and dynamic animations_
 
