@@ -65,6 +65,15 @@ cp .env.example .env.local
 pnpm dev
 ```
 
+## 🔑 Environment Variables Setup
+
+1. Get your Gemini API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+
+2. Create a `.env` file in the root directory:
+   ```bash
+   cp .env.example .env
+   ```
+
 ## 📖 Documentation
 
 <details>
