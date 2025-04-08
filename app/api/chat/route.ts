@@ -1,5 +1,6 @@
 import { ChatServiceError } from "@/lib/chat-service";
-import { GoogleGenerativeAI } from "@google/generative-ai"
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import type { AIModelInstructions } from "@/lib/ai-instructions";
 
 // Initialize the Gemini API client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
@@ -7,8 +8,10 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    
-    if (!body || !body.messages || !Array.isArray(body.messages)) {
+    const { messages, mode, instructions } = body;
+
+    // Validate request
+    if (!body || !messages || !Array.isArray(messages)) {
       return new Response(
         JSON.stringify({
           error: "Invalid request body format",
@@ -21,8 +24,6 @@ export async function POST(request: Request) {
         }
       );
     }
-
-    const { messages, mode } = body;
 
     // Improved validation
     if (!messages || !Array.isArray(messages)) {
@@ -58,26 +59,28 @@ export async function POST(request: Request) {
       )
     }
 
+    // Initialize model with instructions
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-exp-image-generation",
-    })
+      model: "gemini-2.0-flash-exp-image-generation",  // Change to stable model
+    });
 
-    // Convert messages to Gemini format
-    const formattedHistory = messages.slice(0, -1).map((msg: any) => ({
-      role: msg.role === "user" ? "user" : "model",
-      parts: [{ text: msg.content }],
-    }))
+    // Format messages - ensure first message is from user
+    const formattedHistory = messages
+      .slice(0, -1)
+      .filter(msg => msg.role !== 'system')
+      .map((msg: any) => ({
+        role: msg.role === "user" ? "user" : "model",
+        parts: [{ text: msg.content }]
+      }));
 
     // Start a chat session
     const chat = model.startChat({
       history: formattedHistory,
       generationConfig: {
         temperature: 0.9,
-        topP: 0.95,
-        topK: 40,
-        maxOutputTokens: 8192,
-      },
-    })
+        maxOutputTokens: 2048,
+      }
+    });
 
     // Get the last user message
     const lastMessage = messages[messages.length - 1]

@@ -1,10 +1,17 @@
 import type { Message } from "./store"
+import { getInstructions, validateMessage } from './ai-instructions';
 
 export async function sendMessage(messages: Message[], mode = "normal") {
   try {
-    // Validate messages array with more detailed error
+    const instructions = getInstructions();
+    
+    // Validate messages
     if (!Array.isArray(messages) || messages.length === 0) {
-      throw new Error("Messages array cannot be empty")
+      throw new ChatServiceError("Messages array cannot be empty");
+    }
+
+    if (!messages.every(validateMessage)) {
+      throw new ChatServiceError("Invalid message format");
     }
 
     const response = await fetch("/api/chat", {
@@ -12,9 +19,10 @@ export async function sendMessage(messages: Message[], mode = "normal") {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         messages,
-        mode 
+        mode,
+        instructions // Add instructions to the request
       }),
     })
 
