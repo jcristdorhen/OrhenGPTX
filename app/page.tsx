@@ -14,12 +14,12 @@ export default function ChatGPTInterface() {
     <div className="flex min-h-screen flex-col bg-white">
       <Header /> {/* Header will stay fixed */}
 
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col relative overflow-hidden">
         <AnimatePresence mode="wait">
           {isChatMode ? (
             <motion.div
               key="chat"
-              className="flex-1 flex flex-col relative h-full"
+              className="flex-1 flex flex-col h-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

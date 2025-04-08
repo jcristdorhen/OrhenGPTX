@@ -1,9 +1,10 @@
 "use client"
 
 import { motion } from "framer-motion"
-// Remove PencilIcon import since we're using custom SVG
 import { Button } from "@/components/ui/button"
 import { useChatStore } from "@/lib/store"
+import { useState } from "react"
+import { DevelopmentModal } from "@/components/ui/development-modal"
 
 export default function Header() {
   const { 
@@ -15,6 +16,8 @@ export default function Header() {
     setAttachments 
   } = useChatStore()
 
+  const [modalOpen, setModalOpen] = useState(false)
+
   const handleNewChat = () => {
     sessionStorage.removeItem('chatSession');
     localStorage.removeItem('chat-storage');
@@ -23,6 +26,10 @@ export default function Header() {
     setInputMode("normal");
     setChatMode(false);
     setLoading(false);
+  }
+
+  const handleAuthClick = () => {
+    setModalOpen(true)
   }
 
   return (
@@ -83,15 +90,27 @@ export default function Header() {
       </div>
       <div className="flex items-center gap-2">
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button variant="outline" className="rounded-full bg-black text-white hover:bg-black/90 border-none px-4">
+          <Button 
+            variant="outline" 
+            className="rounded-full bg-black text-white hover:bg-black/90 border-none px-4"
+            onClick={handleAuthClick}
+          >
             Log in
           </Button>
         </motion.div>
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button variant="outline" className="rounded-full text-black border-gray-300 hover:bg-gray-100 px-4">
+          <Button 
+            variant="outline" 
+            className="rounded-full text-black border-gray-300 hover:bg-gray-100 px-4"
+            onClick={handleAuthClick}
+          >
             Sign up
           </Button>
         </motion.div>
+        <DevelopmentModal 
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
       </div>
     </motion.header>
   )
