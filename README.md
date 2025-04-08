@@ -12,7 +12,7 @@
 
 _A superior ChatGPT clone with enhanced UI/UX and dynamic animations_
 
-[Live Demo](https://your-demo-link.com) · [Report Bug](https://github.com/yourusername/OrhenGPT/issues) · [Request Feature](https://github.com/yourusername/OrhenGPT/issues)
+[Live Demo](https://orhengptx.vercel.app/) · [Report Bug](https://github.com/jcristdorhen/OrhenGPTX/issues) · [Request Feature](https://github.com/jcristdorhen/OrhenGPTX/issues)
 
 </div>
 
@@ -71,7 +71,7 @@ pnpm dev
 
 2. Create a `.env` file in the root directory:
    ```bash
-   cp .env.example .env
+   cp .env
    ```
 
 ## 📖 Documentation
