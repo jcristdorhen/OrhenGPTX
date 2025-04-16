@@ -19,7 +19,7 @@ _A superior ChatGPT clone with enhanced UI/UX and dynamic animations_
 ## ✨ Features
 
 <div align="center">
-  <img src="https://i.imgur.com/YourDemoGif.gif" alt="OrhenGPT Demo" width="800px" />
+  <img src="images/demo.png" alt="OrhenGPT Screenshot DEMO" width="800px" />
 </div>
 
 - 🎨 **Modern UI/UX** - Sleek design with smooth animations
